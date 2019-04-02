@@ -96,15 +96,19 @@ alias mongo='sudo service mongod start'
 alias mongost='sudo service mongod stop'
 alias mongore='sudo service mongod restart'
 
-alias pls='php please'
-
 alias opin='eval $(op signin my)'
 
-alias hlp='cht.sh'
 alias cht='hlp'
-
+alias hlp='cht.sh'
 alias pls='php please'
 alias hst='sudo nano /etc/hosts'
+
+alias grep='grep  --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn}'
+alias -g G='| grep -i'
+alias d='dirs -v | head -10'
+alias fll='ls -lah | fzf'
+alias fnano='nano (fll)'
+alias files='rg --files | fzf'
 
 #purge all docker images and containers
 alias dockercleanall='docker rm $(docker ps -a -q) && docker rmi $(docker images -q)'
@@ -150,6 +154,22 @@ api_token_dev () {
 --data-urlencode "grant_type=password" \
 https://api.dev.sipgate.com/login/sipgate-apps/protocol/openid-connect/token | jq -r '.access_token')
     echo 'Stored token in $API_TOKEN_DEV'
+}
+
+### PROCESS
+# mnemonic: [K]ill [P]rocess
+# show output of "ps -ef", use [tab] to select one or multiple entries
+# press [enter] to kill selected processes and go back to the process list.
+# or press [escape] to go back to the process list. Press [escape] twice to exit completely.
+
+kp () {
+  local pid=$(ps -ef | sed 1d | eval "fzf ${FZF_DEFAULT_OPTS} -m --header='[kill:process]'" | awk '{print $2}')
+
+  if [ "x$pid" != "x" ]
+  then
+    echo $pid | xargs kill -${1:-9}
+    kp
+  fi
 }
 
 if [ -f "$HOME/.zsh_local" ]; then source "$HOME/.zsh_local"; fi
