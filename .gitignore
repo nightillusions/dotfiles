@@ -3,5 +3,6 @@
 # Un-ignore all of subtree
 !/.zsh/
 !/terminator/
+!.zshrc
 !.zshenv
 !.gitignore
