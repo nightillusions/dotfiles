@@ -10,6 +10,8 @@ zplug "zsh-users/zsh-syntax-highlighting"
 zplug "zsh-users/zsh-history-substring-search"
 zplug "zsh-users/zsh-autosuggestions"
 zplug "plugins/pass/", from:oh-my-zsh
+zplug "plugins/docker",   from:oh-my-zsh
+zplug "plugins/docker-compose", from:oh-my-zsh
 
 #fzf - load correct history file -> load fzf bin -> load fzf keybindings
 zplug "sorin-ionescu/prezto", use:modules/history/init.zsh
@@ -56,7 +58,7 @@ export PATH=$PATH:$HOME/.cargo/bin
 export PATH=$PATH:/opt/node/bin
 export PATH=$PATH:/usr/lib/node_modules
 export PATH=$PATH:$HOME/.local/bin
-
+export PATH=$PATH:$HOME/.config/composer/vendor/bin
 export EDITOR='vim'
 
 export HISTCONTROL=erasedups:ignorespace
@@ -101,6 +103,7 @@ alias opin='eval $(op signin my)'
 alias cht='hlp'
 alias hlp='cht.sh'
 alias pls='php please'
+alias arti='php artisan'
 alias hst='sudo nano /etc/hosts'
 
 alias grep='grep  --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn}'
@@ -110,9 +113,11 @@ alias fll='ls -lah | fzf'
 alias fnano='nano (fll)'
 alias files='rg --files | fzf'
 
+alias fixmouse='sudo modprobe -r psmouse && sudo modprobe psmouse'
+
 #purge all docker images and containers
 alias dockercleanall='docker rm $(docker ps -a -q) && docker rmi $(docker images -q)'
-
+alias laradock='cd ~/code/laradock/ && docker-compose up -d nginx mysql phpmyadmin redis workspace'
 
 take () {
 	mkdir -p $1
@@ -154,6 +159,10 @@ api_token_dev () {
 --data-urlencode "grant_type=password" \
 https://api.dev.sipgate.com/login/sipgate-apps/protocol/openid-connect/token | jq -r '.access_token')
     echo 'Stored token in $API_TOKEN_DEV'
+}
+
+homestead() {
+    ( cd ~/Homestead && vagrant $* )
 }
 
 ### PROCESS
